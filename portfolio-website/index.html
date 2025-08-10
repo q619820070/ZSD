@@ -1,0 +1,1388 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>创意作品集 - AIGC & 视觉设计</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: #000;
+            overflow-x: hidden;
+        }
+
+        /* 导航栏 */
+        .navbar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            backdrop-filter: blur(20px);
+            z-index: 1000;
+            padding: 20px 0;
+            transition: all 0.3s ease;
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 40px;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 700;
+            color: #fff;
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 40px;
+        }
+
+        .nav-links a {
+            color: #fff;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .nav-links a:hover {
+            color: #007AFF;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: #007AFF;
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        /* Hero区域 */
+        .hero {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #000 0%, #1a1a1a 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-content {
+            text-align: center;
+            color: #fff;
+            z-index: 2;
+            max-width: 800px;
+            padding: 0 40px;
+        }
+
+        .hero h1 {
+            font-size: clamp(3rem, 8vw, 6rem);
+            font-weight: 700;
+            margin-bottom: 30px;
+            background: linear-gradient(135deg, #fff 0%, #007AFF 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero p {
+            font-size: 1.5rem;
+            margin-bottom: 40px;
+            opacity: 0.8;
+        }
+
+        .cta-button {
+            display: inline-block;
+            padding: 15px 40px;
+            background: #007AFF;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border: 2px solid #007AFF;
+        }
+
+        .cta-button:hover {
+            background: transparent;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(0, 122, 255, 0.3);
+        }
+
+        .scroll-arrow {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 30px;
+        }
+
+        .scroll-arrow svg {
+            width: 32px;
+            height: 40px;
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {
+                transform: translateY(0);
+            }
+            40% {
+                transform: translateY(-10px);
+            }
+            60% {
+                transform: translateY(-5px);
+            }
+        }
+
+        /* AIGC视频作品集 */
+        .video-gallery {
+            padding: 100px 0;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%);
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 40px;
+        }
+
+        .section-title {
+            font-size: 3rem;
+            font-weight: 700;
+            color: #fff;
+            text-align: center;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, #fff 0%, #007AFF 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .section-description {
+            color: #999;
+            text-align: center;
+            margin-bottom: 60px;
+            font-size: 1.1rem;
+            line-height: 1.6;
+        }
+
+        .video-section {
+            margin-bottom: 80px;
+        }
+
+        .video-section-title {
+            font-size: 2rem;
+            color: #007bff;
+            margin-bottom: 40px;
+            text-align: center;
+            font-weight: 600;
+        }
+
+        /* 竖屏视频网格 - 两行三列 */
+        .vertical-videos {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            grid-template-rows: repeat(2, 1fr);
+            gap: 30px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* 横屏视频网格 - 三行两列 */
+        .horizontal-videos {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 30px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .video-item {
+            position: relative;
+            border-radius: 20px;
+            overflow: hidden;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.4s ease;
+        }
+
+        .video-item:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0, 123, 255, 0.3);
+        }
+
+        .video-item.vertical {
+            aspect-ratio: 2/3;
+        }
+
+        .video-item.horizontal {
+            aspect-ratio: 16/9;
+        }
+
+        .video-item video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 20px;
+        }
+
+        .video-info {
+             position: absolute;
+             top: 0;
+             left: 0;
+             right: 0;
+             background: linear-gradient(rgba(0, 0, 0, 0.9), transparent);
+             padding: 20px;
+             color: white;
+             transform: translateY(-100%);
+             transition: transform 0.3s ease;
+         }
+
+         .video-item:hover .video-info {
+             transform: translateY(0);
+         }
+
+        .video-info h4 {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #007bff;
+        }
+
+        .video-info p {
+            font-size: 0.9rem;
+            opacity: 0.9;
+            line-height: 1.4;
+        }
+
+        /* 其他作品集 */
+        .portfolio-gallery {
+            padding: 120px 0;
+            background: #0a0a0a;
+        }
+
+        .portfolio-section {
+            margin-bottom: 100px;
+        }
+
+        .portfolio-section-title {
+            font-size: 2.5rem;
+            color: #007bff;
+            margin-bottom: 20px;
+            text-align: center;
+            font-weight: 600;
+        }
+
+        .portfolio-description {
+            color: #999;
+            text-align: center;
+            margin-bottom: 60px;
+            font-size: 1.1rem;
+            line-height: 1.6;
+        }
+
+        .portfolio-content {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .portfolio-video {
+            margin-bottom: 60px;
+        }
+
+        .portfolio-video video {
+            width: 100%;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 123, 255, 0.2);
+        }
+
+        .portfolio-video .video-info {
+            position: static;
+            background: transparent;
+            padding: 20px 0;
+            transform: none;
+            text-align: center;
+        }
+
+        .portfolio-video .video-info h4 {
+            color: #fff;
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+        }
+
+        .portfolio-video .video-info p {
+            color: #999;
+            font-size: 1rem;
+        }
+
+        /* 分镜图网格 */
+        .storyboard-section {
+            margin-top: 60px;
+        }
+
+        .storyboard-section h4 {
+            color: #fff;
+            font-size: 1.8rem;
+            margin-bottom: 40px;
+            text-align: center;
+        }
+
+        .storyboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+        }
+
+        .storyboard-item {
+            background: #1a1a1a;
+            border-radius: 15px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .storyboard-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0, 122, 255, 0.15);
+        }
+
+        .storyboard-item img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .storyboard-item p {
+            padding: 20px;
+            color: #fff;
+            text-align: center;
+            font-weight: 500;
+        }
+
+        /* 分镜脚本展示 */
+        .design-gallery {
+            margin-top: 60px;
+        }
+
+        .design-gallery h4 {
+            color: #fff;
+            font-size: 1.8rem;
+            margin-bottom: 40px;
+            text-align: center;
+        }
+
+        .design-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .design-item {
+            position: relative;
+            background: #1a1a1a;
+            border-radius: 15px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .design-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0, 122, 255, 0.15);
+        }
+
+        .design-item img {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+        }
+
+        .design-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(transparent, rgba(0, 0, 0, 0.9));
+            padding: 20px;
+            color: white;
+            transform: translateY(100%);
+            transition: transform 0.3s ease;
+        }
+
+        .design-item:hover .design-overlay {
+            transform: translateY(0);
+        }
+
+        .design-overlay h5 {
+            color: #007bff;
+            font-size: 1.1rem;
+            margin-bottom: 8px;
+        }
+
+        .design-overlay p {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        /* 科幻短剧特殊样式 */
+        .drama-showcase {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            margin-bottom: 60px;
+        }
+
+        .drama-main {
+            text-align: center;
+        }
+
+        .drama-cover {
+            width: 100%;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 123, 255, 0.2);
+            margin-bottom: 20px;
+        }
+
+        .drama-info h4 {
+            color: #fff;
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+        }
+
+        .drama-info p {
+            color: #999;
+            font-size: 1rem;
+        }
+
+        .drama-pages {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .drama-page {
+            width: 100%;
+            border-radius: 15px;
+            transition: all 0.3s ease;
+        }
+
+        .drama-page:hover {
+            transform: scale(1.02);
+            box-shadow: 0 10px 30px rgba(0, 122, 255, 0.15);
+        }
+
+        /* 联系方式 */
+        .contact {
+            padding: 120px 0;
+            background: linear-gradient(135deg, #000 0%, #1a1a1a 100%);
+            text-align: center;
+        }
+
+        .contact-content {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .contact h2 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 30px;
+        }
+
+        .contact p {
+            font-size: 1.2rem;
+            color: #999;
+            margin-bottom: 40px;
+        }
+
+        .contact-button {
+            display: inline-block;
+            padding: 15px 40px;
+            background: transparent;
+            color: #007AFF;
+            text-decoration: none;
+            border: 2px solid #007AFF;
+            border-radius: 50px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .contact-button:hover {
+            background: #007AFF;
+            color: #fff;
+            transform: translateY(-2px);
+        }
+
+        .contact-icons {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 2rem;
+            margin: 2rem 0;
+            flex-wrap: nowrap;
+        }
+        
+        .contact-icon-item {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            color: #ffffff;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+        }
+        
+        .contact-icon-item:hover {
+            color: #00d4ff;
+            transform: translateY(-2px);
+        }
+        
+        .icon-wrapper {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #00d4ff, #0099cc);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+        
+        .contact-icon-item:hover .icon-wrapper {
+            background: linear-gradient(135deg, #00ffff, #00d4ff);
+            box-shadow: 0 5px 15px rgba(0, 212, 255, 0.4);
+        }
+        
+        .contact-icon {
+            width: 20px;
+            height: 20px;
+            color: #ffffff;
+        }
+        
+        .contact-icon-item span {
+            font-weight: 500;
+            letter-spacing: 0.5px;
+        }
+        
+        /* 关于我部分的联系信息样式 */
+        .about-contact {
+            margin-top: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            align-items: center;
+        }
+        
+        .about-contact-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #ffffff;
+            font-size: 0.9rem;
+            transition: color 0.3s ease;
+        }
+        
+        .about-contact-item:hover {
+            color: #00d4ff;
+        }
+        
+        .about-contact-icon {
+            width: 12px;
+            height: 12px;
+            color: #00d4ff;
+        }
+        
+        /* 底部联系方式布局 */
+        .contact-bottom {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 2rem;
+            margin: 2rem 0;
+            flex-wrap: wrap;
+        }
+        
+        .contact-bottom .contact-icons {
+            margin: 0;
+        }
+
+         /* 个人介绍样式 */
+         .about {
+             padding: 100px 0;
+             background: #000000;
+             position: relative;
+             overflow: hidden;
+         }
+
+         .about::before {
+             content: '';
+             position: absolute;
+             top: 0;
+             left: 0;
+             right: 0;
+             bottom: 0;
+             background: radial-gradient(circle at 20% 50%, rgba(120, 119, 198, 0.1) 0%, transparent 50%),
+                         radial-gradient(circle at 80% 20%, rgba(255, 118, 117, 0.1) 0%, transparent 50%),
+                         radial-gradient(circle at 40% 80%, rgba(255, 204, 112, 0.1) 0%, transparent 50%);
+         }
+
+         .about-content {
+             max-width: 1200px;
+             margin: 0 auto;
+             padding: 0 20px;
+             position: relative;
+             z-index: 1;
+             display: flex;
+             align-items: center;
+             gap: 80px;
+         }
+
+         .about-photo {
+             flex: 0 0 400px;
+             text-align: center;
+         }
+
+         .about-photo img {
+             width: 350px;
+             height: 350px;
+             border-radius: 50%;
+             object-fit: cover;
+             border: 4px solid #00d4ff;
+             box-shadow: 0 20px 40px rgba(0, 212, 255, 0.2);
+             transition: transform 0.3s ease, box-shadow 0.3s ease;
+         }
+
+         .about-photo img:hover {
+             transform: scale(1.05);
+             box-shadow: 0 30px 60px rgba(0, 212, 255, 0.3);
+         }
+
+         .about-text {
+             flex: 1;
+         }
+
+         .about-text h2 {
+             font-size: 3rem;
+             color: #ffffff;
+             margin-bottom: 30px;
+             font-weight: 900;
+             background: linear-gradient(135deg, #00d4ff, #0099cc);
+             -webkit-background-clip: text;
+             -webkit-text-fill-color: transparent;
+             background-clip: text;
+         }
+
+         .about-description {
+             color: #b0b0b0;
+             font-size: 1.2rem;
+             line-height: 1.8;
+             margin-bottom: 40px;
+         }
+
+         .about-info {
+             display: grid;
+             grid-template-columns: 1fr;
+             gap: 25px;
+         }
+
+         .about-item {
+             background: rgba(255, 255, 255, 0.05);
+             padding: 30px;
+             border-radius: 15px;
+             border-left: 4px solid #00d4ff;
+             transition: transform 0.3s ease, background 0.3s ease;
+         }
+
+         .about-item:hover {
+             transform: translateX(10px);
+             background: rgba(255, 255, 255, 0.08);
+         }
+
+         .about-item h3 {
+             color: #00d4ff;
+             font-size: 1.3rem;
+             margin-bottom: 15px;
+             font-weight: 600;
+         }
+
+         .about-item p {
+             color: #ffffff;
+             line-height: 1.6;
+             font-size: 1rem;
+             margin: 0;
+         }
+
+         /* 响应式设计 */
+        @media (max-width: 1200px) {
+            .vertical-videos {
+                grid-template-columns: repeat(2, 1fr);
+                grid-template-rows: repeat(3, 1fr);
+            }
+            
+            .horizontal-videos {
+                grid-template-columns: 1fr;
+            }
+            
+            .drama-showcase {
+                grid-template-columns: 1fr;
+                gap: 30px;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .nav-container {
+                padding: 0 20px;
+            }
+
+            .nav-links {
+                gap: 20px;
+            }
+
+            .hero-content {
+                padding: 0 20px;
+            }
+
+            .container {
+                padding: 0 20px;
+            }
+            
+            .vertical-videos {
+                grid-template-columns: 1fr;
+                grid-template-rows: repeat(6, 1fr);
+            }
+            
+            .horizontal-videos {
+                grid-template-columns: 1fr;
+            }
+            
+            .storyboard-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .design-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .drama-showcase {
+                grid-template-columns: 1fr;
+            }
+            
+            .drama-pages {
+                flex-direction: row;
+                gap: 15px;
+            }
+
+            .video-grid {
+                grid-template-columns: 1fr;
+                gap: 30px;
+            }
+
+            .video-item.portrait {
+                max-width: 100%;
+                grid-row: span 1;
+            }
+
+            .portfolio-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .section-title {
+                font-size: 2rem;
+            }
+            
+            .video-section-title {
+                font-size: 1.5rem;
+            }
+            
+            .portfolio-section-title {
+                font-size: 2rem;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .storyboard-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .drama-pages {
+                flex-direction: column;
+            }
+            
+            .contact h2 {
+                font-size: 2rem;
+            }
+            
+            .contact p {
+                font-size: 1rem;
+            }
+            
+            .contact-button {
+                font-size: 1rem;
+                padding: 12px 24px;
+            }
+            
+            .contact-icons {
+                gap: 1rem;
+                margin: 1.5rem 0;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            .contact-icon-item {
+                font-size: 1rem;
+                gap: 0.6rem;
+            }
+            
+            .icon-wrapper {
+                width: 35px;
+                height: 35px;
+            }
+            
+            .contact-icon {
+                width: 18px;
+                height: 18px;
+            }
+            
+            .contact-bottom {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .about-contact {
+                gap: 8px;
+            }
+            
+            .about-contact-item {
+                font-size: 0.8rem;
+            }
+            
+            .about-text h2 {
+                font-size: 2rem;
+            }
+            
+            .about-info {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            
+            .about-item {
+                padding: 25px;
+            }
+            
+            .about-item h3 {
+                font-size: 1.3rem;
+            }
+            
+            .about-item p {
+                font-size: 1rem;
+            }
+        }
+
+        /* 滚动动画 */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.6s ease;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body>
+    <!-- 导航栏 -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="#" class="logo">郑烁东的作品集</a>
+            <ul class="nav-links">
+                <li><a href="#home">首页</a></li>
+                <li><a href="#about">关于我</a></li>
+                <li><a href="#aigc-videos">AIGC视频</a></li>
+                <li><a href="#portfolio">其他作品集</a></li>
+                <li><a href="#contact">联系我</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Hero区域 -->
+    <section id="home" class="hero">
+        <div class="hero-content">
+            <h1>《创意无界》</h1>
+            <p>2025作品集，展示AIGC技术与视觉艺术的碰撞交融</p>
+            <a href="#videos" class="cta-button">往下滑</a>
+            <div class="scroll-arrow">
+                <svg width="32" height="40" viewBox="0 0 32 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M8 12L16 20L24 12" stroke="#007AFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M8 22L16 30L24 22" stroke="#007AFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </div>
+        </div>
+    </section>
+
+    <!-- 个人介绍 -->
+    <section id="about" class="about">
+        <div class="about-content fade-in">
+            <div class="about-photo">
+                <img src="作品集/个人照/个人照.png" alt="郑烁东个人照片">
+                <div class="about-contact">
+                    <div class="about-contact-item">
+                        <svg class="about-contact-icon" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/>
+                        </svg>
+                        <span>zsd1456313448</span>
+                    </div>
+                    <div class="about-contact-item">
+                        <svg class="about-contact-icon" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/>
+                        </svg>
+                        <span>619820070@qq.com</span>
+                    </div>
+                    <div class="about-contact-item">
+                        <svg class="about-contact-icon" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/>
+                        </svg>
+                        <span>19068098382</span>
+                    </div>
+                </div>
+            </div>
+            <div class="about-text">
+                <h2>关于我</h2>
+                <p class="about-description">我是郑烁东，广州美术学院艺术与科技专业毕业的AIGC视频策划师。专注于将前沿AI技术与创意艺术完美融合，为客户打造具有影响力的视觉内容。</p>
+                <div class="about-info">
+                    <div class="about-item">
+                        <h3>教育背景</h3>
+                        <p>本科—毕业于广州美术学院，艺术与科技专业，专注AIGC视频策划与创作，拥有4年丰富的工作经验。</p>
+                    </div>
+                    <div class="about-item">
+                        <h3>核心技能</h3>
+                        <p>复合型AIGC领军者：设计师的敏锐审美与创意，结合AIGC技术的创新应用，精通从剧本策划、视觉设计到视频制作全链路，主打路线成为行业内稀缺的：复合型人才。</p>
+                    </div>
+                    <div class="about-item">
+                        <h3>工作成果</h3>
+                        <p>主导并落地华为、WMC全球移动通信大会、广东农科院等多个重量级项目并已成功商业落地。擅长运用AIGC技术进行内容营销与团队管理，创造出千万级商业创收。</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- AIGC视频作品集 -->
+    <section id="aigc-videos" class="video-gallery">
+        <div class="container">
+            <h2 class="section-title">AIGC个人原创视频</h2>
+            
+            <!-- AI短视频区域 -->
+            <div class="video-section">
+                <h3 class="video-section-title">AI短视频</h3>
+                <div class="video-grid vertical-videos">
+                    <!-- 第一行竖屏视频 -->
+                    <div class="video-item vertical">
+                        <video controls poster="">
+                            <source src="videos/1,钱学森.mp4" type="video/mp4">
+                            您的浏览器不支持视频播放。
+                        </video>
+                        <div class="video-info">
+                            <h4>钱学森传记</h4>
+                            <p>展现钱学森传奇一生的AI生成短视频</p>
+                        </div>
+                    </div>
+                    
+                    <div class="video-item vertical">
+                        <video controls poster="">
+                            <source src="videos/2，香奈儿.mp4" type="video/mp4">
+                            您的浏览器不支持视频播放。
+                        </video>
+                        <div class="video-info">
+                            <h4>香奈儿传记</h4>
+                            <p>时尚女王香奈儿的传奇人生故事</p>
+                        </div>
+                    </div>
+                    
+                    <div class="video-item vertical">
+                        <video controls poster="">
+                            <source src="videos/3，马斯克最终版.mp4" type="video/mp4">
+                            您的浏览器不支持视频播放。
+                        </video>
+                        <div class="video-info">
+                            <h4>马斯克传奇</h4>
+                            <p>科技狂人埃隆·马斯克的创业传奇</p>
+                        </div>
+                    </div>
+                    
+                    <!-- 第二行竖屏视频 -->
+                    <div class="video-item vertical">
+                        <video controls poster="">
+                            <source src="videos/4，马斯克.mp4" type="video/mp4">
+                            您的浏览器不支持视频播放。
+                        </video>
+                        <div class="video-info">
+                            <h4>马斯克传奇（第二版）</h4>
+                            <p>深度解析马斯克的传奇一生</p>
+                        </div>
+                    </div>
+                    
+                    <div class="video-item vertical">
+                            <video controls poster="">
+                                <source src="videos/6，宣传片,.mp4" type="video/mp4">
+                                您的浏览器不支持视频播放。
+                            </video>
+                            <div class="video-info">
+                                <h4>谭贻国《世界第一天》</h4>
+                                <p>AI创意宣传视频，新书首发宣传片</p>
+                            </div>
+                        </div>
+                        
+                        <div class="video-item vertical">
+                            <video controls poster="">
+                                <source src="videos/5，田园生活.mp4" type="video/mp4">
+                                您的浏览器不支持视频播放。
+                            </video>
+                            <div class="video-info">
+                                <h4>田园生活</h4>
+                                <p>诗意田园生活的AI视觉呈现</p>
+                            </div>
+                        </div>
+                </div>
+            </div>
+            
+            <!-- 横屏视频区域 -->
+            <div class="video-section">
+                <h3 class="video-section-title">AI影视作品</h3>
+                <div class="video-grid horizontal-videos">
+                    <!-- 第一行横屏视频 -->
+                    <div class="video-item horizontal">
+                        <video controls poster="">
+                            <source src="videos/7,黑猩猩16：9.mp4" type="video/mp4">
+                            您的浏览器不支持视频播放。
+                        </video>
+                        <div class="video-info">
+                            <h4>黑猩猩理发记</h4>
+                            <p>当黑猩猩走进人类理发店，会发生什么有趣的事情？</p>
+                        </div>
+                    </div>
+                    
+                    <div class="video-item horizontal">
+                        <video controls poster="">
+                            <source src="videos/8耳机.mp4" type="video/mp4">
+                            您的浏览器不支持视频播放。
+                        </video>
+                        <div class="video-info">
+                            <h4>小米耳机AI宣传片</h4>
+                            <p>高端耳机产品的创意展示视频，融合科技美学与功能介绍</p>
+                        </div>
+                    </div>
+                    
+                    <!-- 第二行横屏视频 -->
+                     <div class="video-item horizontal">
+                         <video controls poster="">
+                             <source src="videos/9，美国伊朗最终版16：9.mp4" type="video/mp4">
+                             您的浏览器不支持视频播放。
+                         </video>
+                         <div class="video-info">
+                             <h4>美国空袭伊朗</h4>
+                             <p>愿世界和平，愿世界和平！</p>
+                         </div>
+                     </div>
+                     
+                     <div class="video-item horizontal">
+                         <video controls poster="">
+                             <source src="videos/10 (救援行动16：9.mp4" type="video/mp4">
+                             您的浏览器不支持视频播放。
+                         </video>
+                         <div class="video-info">
+                             <h4>救援行动（版本1）</h4>
+                             <p>紧张刺激的救援行动场景第一版本</p>
+                         </div>
+                     </div>
+                     
+                     <!-- 第三行横屏视频 -->
+                     <div class="video-item horizontal">
+                          <video controls poster="">
+                              <source src="videos/11，救援行动，16：9.mp4" type="video/mp4">
+                              您的浏览器不支持视频播放。
+                          </video>
+                          <div class="video-info">
+                              <h4>救援行动（版本2）</h4>
+                              <p>救援行动场景的优化版本，展现人性光辉与英雄主义</p>
+                          </div>
+                      </div>
+                      
+                      <div class="video-item horizontal">
+                          <video controls poster="">
+                              <source src="videos/12，使命召唤，16：9.mp4" type="video/mp4">
+                              您的浏览器不支持视频播放。
+                          </video>
+                          <div class="video-info">
+                              <h4>使命召唤</h4>
+                              <p>一个胖子秒变召唤师。</p>
+                          </div>
+                      </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 科幻短剧作品 -->
+    <section class="portfolio-gallery">
+        <div class="container">
+            <div class="portfolio-section">
+                <h3 class="portfolio-section-title">儿童教育科幻短剧</h3>
+                <p class="portfolio-description">与《中国西安出版社》联合打造科技元素的短剧创作，展现未来世界的无限可能</p>
+                <div class="portfolio-content">
+                    <!-- 封面和主要图片 -->
+                    <div class="drama-showcase">
+                        <div class="drama-main">
+                            <img src="作品集/科幻短剧/封面.png" alt="科幻短剧封面" class="drama-cover">
+                            <div class="drama-info">
+                                <h4></h4>
+                            </div>
+                        </div>
+                        
+                        <div class="drama-pages">
+                            <img src="作品集/科幻短剧/第二页.jpg" alt="科幻短剧第二页" class="drama-page">
+                        </div>
+                    </div>
+                    
+                    <!-- 分镜图片展示 -->
+                    <div class="storyboard-section">
+                        <h4>分镜设计稿</h4>
+                        <div class="storyboard-grid">
+                            <div class="storyboard-item">
+                                <img src="作品集/科幻短剧/拆分的图片/1.png" alt="科幻分镜1">
+                                <p>开场世界观设定</p>
+                            </div>
+                            <div class="storyboard-item">
+                                <img src="作品集/科幻短剧/拆分的图片/2.png" alt="科幻分镜2">
+                                <p>主角登场镜头</p>
+                            </div>
+                            <div class="storyboard-item">
+                                <img src="作品集/科幻短剧/拆分的图片/3.png" alt="科幻分镜3">
+                                <p>奇妙道具出现</p>
+                            </div>
+                            <div class="storyboard-item">
+                                <img src="作品集/科幻短剧/拆分的图片/4.png" alt="科幻分镜4">
+                                <p>搭建星际友人的第一座桥梁</p>
+                            </div>
+                            <div class="storyboard-item">
+                                <img src="作品集/科幻短剧/拆分的图片/12.png" alt="科幻分镜5">
+                                <p>情感镜头表达</p>
+                            </div>
+                            <div class="storyboard-item">
+                                <img src="作品集/科幻短剧/拆分的图片/18 (1).png" alt="科幻分镜6">
+                                <p>特效场景设计</p>
+                            </div>
+                            <div class="storyboard-item">
+                                <img src="作品集/科幻短剧/拆分的图片/19.png" alt="科幻分镜7">
+                                <p>高潮镜头设计</p>
+                            </div>
+                            <div class="storyboard-item">
+                                <img src="作品集/科幻短剧/拆分的图片/20.png" alt="科幻分镜8">
+                                <p>结局镜头设计</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 其他作品集 -->
+    <section id="portfolio" class="portfolio-gallery">
+        <div class="container">
+            <h2 class="section-title">其他策划作品</h2>
+            <p class="section-description">（展示我在不同领域的创意与设计工作）</p>
+            
+            <!-- AI机柜作品 -->
+            <div class="portfolio-section">
+                <h3 class="portfolio-section-title">全球移动通讯大会AI机柜脚本宣传视频</h3>
+                <p class="portfolio-description">AI机柜产品的完整视频，从手绘分镜到最终视频呈现</p>
+                <div class="portfolio-content">
+                    <!-- 视频展示 -->
+                    <div class="portfolio-video">
+                        <video controls poster="">
+                            <source src="作品集/AI机柜/AI机柜16：9视频.mp4" type="video/mp4">
+                            您的浏览器不支持视频播放。
+                        </video>
+                        <div class="video-info">
+                            <h4>华为AI机柜产品视频</h4>
+                            <p>展示AI机柜的设计理念、功能特点和应用场景</p>
+                        </div>
+                    </div>
+                    
+                    <!-- 手绘分镜图 -->
+                    <div class="storyboard-section">
+                        <h4>手绘分镜脚本</h4>
+                        <div class="storyboard-grid">
+                            <div class="storyboard-item">
+                                <img src="作品集/AI机柜/手绘图/image-4.png" alt="分镜图1">
+                                <p>开场镜头设计</p>
+                            </div>
+                            <div class="storyboard-item">
+                                <img src="作品集/AI机柜/手绘图/image-1.png" alt="分镜图2">
+                                <p>应用场景镜头</p>
+                            </div>
+                            <div class="storyboard-item">
+                                <img src="作品集/AI机柜/手绘图/image-3.png" alt="分镜图3">
+                                <p>产品特写镜头</p>
+                            </div>
+                            <div class="storyboard-item">
+                                <img src="作品集/AI机柜/手绘图/image-2.png" alt="分镜图4">
+                                <p>功能展示镜头</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 服务器脚本作品 -->
+            <div class="portfolio-section">
+                <h3 class="portfolio-section-title">华为服务器宣传片脚本</h3>
+                <p class="portfolio-description">服务器产品的视觉设计与脚本策划，技术与艺术的完美结合</p>
+                <div class="portfolio-content">
+                    <!-- 视频展示 -->
+                    <div class="portfolio-video">
+                        <video controls poster="">
+                            <source src="作品集/服务器脚本/服务器16：9视频.mp4" type="video/mp4">
+                            您的浏览器不支持视频播放。
+                        </video>
+                        <div class="video-info">
+                            <h4>服务器产品视频</h4>
+                            <p>专业的服务器产品展示，突出技术优势和应用价值</p>
+                        </div>
+                    </div>
+                    
+                    <!-- 设计图片 -->
+                    <div class="design-gallery">
+                        <h4>设计稿展示</h4>
+                        <div class="design-grid">
+                            <div class="design-item">
+                                <img src="作品集/服务器脚本/拆分的图片/5.png" alt="服务器设计1">
+                                <div class="design-overlay">
+                                    <h5>概念设计</h5>
+                                    <p>服务器产品的初始概念设计</p>
+                                </div>
+                            </div>
+                            <div class="design-item">
+                                <img src="作品集/服务器脚本/拆分的图片/15.png" alt="服务器设计2">
+                                <div class="design-overlay">
+                                    <h5>技术规格</h5>
+                                    <p>详细的技术参数与规格说明</p>
+                                </div>
+                            </div>
+                            <div class="design-item">
+                                <img src="作品集/服务器脚本/拆分的图片/16.png" alt="服务器设计3">
+                                <div class="design-overlay">
+                                    <h5>应用场景</h5>
+                                    <p>服务器在不同场景下的应用展示</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+
+        </div>
+    </section>
+
+    <!-- 联系方式 -->
+    <section id="contact" class="contact">
+        <div class="contact-content fade-in">
+            <h2>让我们一起创造</h2>
+            <p>如果您对我的作品感兴趣，欢迎与我联系探讨合作机会</p>
+            <div class="contact-bottom">
+                <a href="mailto:619820070@qq.com" class="contact-button">联系我</a>
+                <div class="contact-icons">
+                    <div class="contact-icon-item">
+                         <div class="icon-wrapper">
+                             <img src="作品集/图标/微信.png" alt="微信" class="contact-icon">
+                         </div>
+                         <span>zsd1456313448</span>
+                     </div>
+                     <div class="contact-icon-item">
+                         <div class="icon-wrapper">
+                             <img src="作品集/图标/邮箱.png" alt="邮箱" class="contact-icon">
+                         </div>
+                         <span>619820070@qq.com</span>
+                     </div>
+                     <div class="contact-icon-item">
+                         <div class="icon-wrapper">
+                             <img src="作品集/图标/电话.png" alt="电话" class="contact-icon">
+                         </div>
+                         <span>19068098382</span>
+                     </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        // 滚动动画
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.fade-in').forEach(el => {
+            observer.observe(el);
+        });
+
+        // 平滑滚动
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // 导航栏滚动效果
+        window.addEventListener('scroll', () => {
+            const navbar = document.querySelector('.navbar');
+            if (window.scrollY > 100) {
+                navbar.style.background = 'rgba(0, 0, 0, 0.98)';
+            } else {
+                navbar.style.background = 'rgba(0, 0, 0, 0.95)';
+            }
+        });
+    </script>
+</body>
+</html>
